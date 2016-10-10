@@ -40,16 +40,16 @@ function sdm_install_db_table() {
     $table_name = $wpdb->prefix . 'sdm_downloads';
 
     $sql = 'CREATE TABLE ' . $table_name . ' (
-			  id mediumint(9) NOT NULL AUTO_INCREMENT,
-			  post_id mediumint(9) NOT NULL,
-			  post_title mediumtext NOT NULL,
-			  file_url mediumtext NOT NULL,
-			  visitor_ip mediumtext NOT NULL,
-			  date_time datetime DEFAULT "0000-00-00 00:00:00" NOT NULL,
-			  visitor_country mediumtext NOT NULL,
-			  visitor_name mediumtext NOT NULL,
-			  UNIQUE KEY id (id)
-		);';
+    id mediumint(9) NOT NULL AUTO_INCREMENT,
+    post_id mediumint(9) NOT NULL,
+    post_title mediumtext NOT NULL,
+    file_url mediumtext NOT NULL,
+    visitor_ip mediumtext NOT NULL,
+    date_time datetime DEFAULT "0000-00-00 00:00:00" NOT NULL,
+    visitor_country mediumtext NOT NULL,
+    visitor_name mediumtext NOT NULL,
+    UNIQUE KEY id (id)
+    );';
 
     require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
     dbDelta($sql);
@@ -162,7 +162,7 @@ class simpleDownloadManager {
             $sdmTranslations = array(
                 'image_removed' => __('Image Successfully Removed', 'simple-download-monitor'),
                 'ajax_error' => __('Error with AJAX', 'simple-download-monitor')
-            );
+                );
             wp_localize_script('sdm-upload', 'sdm_translations', $sdmTranslations);
         }
 
@@ -204,7 +204,7 @@ class simpleDownloadManager {
     }
 
     public function sdm_create_upload_metabox() {
-        
+
         //*****  Create metaboxes for the custom post type
         add_meta_box('sdm_description_meta_box', __('Deskripsi', 'simple-download-monitor'), array(&$this, 'display_sdm_description_meta_box'), 'sdm_downloads', 'normal', 'default');
         add_meta_box('sdm_upload_meta_box', __('Upload File', 'simple-download-monitor'), array(&$this, 'display_sdm_upload_meta_box'), 'sdm_downloads', 'normal', 'default');
@@ -239,7 +239,7 @@ class simpleDownloadManager {
         
         echo '<br />';
         echo '<input id="upload_image_button" type="button" class="button-primary" value="'.__('Select File', 'simple-download-monitor').'" />';
-                
+
         echo '<br /><br />';
         _e('Steps to upload a file or choose one from your media library:', 'simple-download-monitor');
         echo '<ol>';
@@ -627,7 +627,7 @@ function handle_sdm_download_via_direct_post() {
                 'date_time' => $date_time,
                 'visitor_country' => $visitor_country,
                 'visitor_name' => $visitor_name
-            );
+                );
 
             $data = array_filter($data); //Remove any null values.
             $insert_table = $wpdb->insert($table, $data);
@@ -654,7 +654,7 @@ function sdm_tiny_get_post_ids_ajax_call() {
 
     $args = array(
         'post_type' => 'sdm_downloads',
-    );
+        );
     $loop = new WP_Query($args);
     $test = '';
     foreach ($loop->posts as $loop_post) {
@@ -709,8 +709,8 @@ function sdm_pop_cats_ajax_call() {
                 'field' => 'slug',
                 'terms' => $cat_slug,
                 'include_children' => 0
-            )
-        ),
+                )
+            ),
         'orderby' => 'title',
         'order' => 'ASC')
     );
@@ -799,6 +799,15 @@ function sdm_admin_column_width() {
     echo '.column-taxonomy-sdm_categories { width:200px !important; overflow:hidden }';
     echo '.column-taxonomy-sdm_tags { width:200px !important; overflow:hidden }';
     echo '</style>';
+}
+
+function getTotalDownload(){
+    //Do a query to find the total number of rows then calculate the query limit
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'sdm_downloads';
+    $query = "SELECT COUNT(*) FROM $table_name";
+    $total_items = $wpdb->get_var($query);//For pagination requirement
+    return $total_items;
 }
 
 /*
