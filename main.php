@@ -811,12 +811,13 @@ function getTotalDownload(){
 }
 function isEligibleToDownload(){
     //Do a query to find the total number of rows then calculate the query limit
+    // AND
     global $wpdb;
     global $current_user;
     $table_name = $wpdb->prefix . 'sdm_downloads';
-    $query = "SELECT COUNT(*) FROM $table_name WHERE DATE(date_time) = CURDATE() AND visitor_name='$current_user->user_login'";
-    $total_items = $wpdb->get_var($query);//For pagination requirement
-    return ($total_items<=3);
+    $query = "SELECT date_time,visitor_name,post_id FROM $table_name WHERE visitor_name='$current_user->user_login' AND DATE(date_time) = CURDATE()";
+    $total_items = $wpdb->get_results($query);//For pagination requirement
+    return sizeof($total_items) < 3;
 }
 
 /*
