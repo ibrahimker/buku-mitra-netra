@@ -820,6 +820,14 @@ function isEligibleToDownload(){
     return sizeof($total_items) < 3;
 }
 
+function getUserActivity(){
+    global $wpdb;
+    global $current_user;
+    $table_name = $wpdb->prefix . 'sdm_downloads';
+    $query = "SELECT post_title,file_url,visitor_ip,date_time FROM $table_name WHERE visitor_name='$current_user->user_login'";
+    return $wpdb->get_results($query);
+}
+
 /*
  * * Register Tinymce Button
  */
