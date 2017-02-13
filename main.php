@@ -817,7 +817,7 @@ function isEligibleToDownload(){
     $table_name = $wpdb->prefix . 'sdm_downloads';
     $query = "SELECT date_time,visitor_name,post_id FROM $table_name WHERE visitor_name='$current_user->user_login' AND DATE(date_time) = CURDATE()";
     $total_items = $wpdb->get_results($query);//For pagination requirement
-    return sizeof($total_items) < 3;
+    return sizeof($total_items) < 3; //Limit jumlah buku yang dapat didownload
 }
 
 function getUserActivity(){

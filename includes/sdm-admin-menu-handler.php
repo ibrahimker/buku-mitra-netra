@@ -131,7 +131,6 @@ function sdm_create_logs_page() {
                     <input type="submit" class="button" name="sdm_reset_log_entries" value="<?php _e('Reset Log Entries', 'simple-download-monitor'); ?>" />
                 </div>    
             </form> 
-            <?php echo isEligibleToDownload(); ?></br>
             </div></div>
             
         </div></div><!-- end of .poststuff and .post-body -->
